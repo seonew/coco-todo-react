@@ -14,8 +14,9 @@ const styles = theme => ({
 
 class TodoItemList extends React.Component {
 
-  handleItemToggleClick(todo) {
+  handleItemToggleClick(current) {
     const { onItemToggle, data } = this.props;
+    const todo = current["todo"];
 
     let index = 0;
     for (let i = 0; i < data.length; i++){
@@ -33,8 +34,9 @@ class TodoItemList extends React.Component {
     onItemEditClick(todo);
   }
 
-  handleItemDeleteClick(todo) {
+  handleItemDeleteClick(current) {
     const { onItemDeleteClick, data } = this.props;
+    const todo = current["todo"];
 
     let index = 0;
     for (let i = 0; i < data.length; i++){
@@ -43,7 +45,6 @@ class TodoItemList extends React.Component {
         break;
       }
     }
-
     onItemDeleteClick(index);
   }
 
