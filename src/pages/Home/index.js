@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import api from '../../api';
 import TodoItemList from 'components/TodoItemList';
+import TodoInputbox from 'components/TodoInputbox';
 
 class Home extends Component {
 
@@ -9,12 +10,13 @@ class Home extends Component {
 
     this.state = {
       itemModalOpened: false,
-      // newTodoContent: '',
+      newTodoContent: '',
       todos: [{
         state: 0,
         content: '',
         registerDate: '',
         editedDate: '',
+        checked: false,
         loading: false
       }],
       spinner: true,
@@ -25,8 +27,46 @@ class Home extends Component {
       },
       id: '',
     }
-    
+  }
 
+
+  handleItemAddClick(todos) {
+    const newTodo = {
+      state: 0,
+      content: '',
+      registerDate: '',
+      editedDate: '',
+      checked: false
+    };
+    newTodo.content = todos;
+    this.setState({newTodoContent: todos});
+
+    let currentData = newTodo;
+    currentData.authToken = this.state.authToken;
+
+    api.insert(currentData)
+    .then((response) => {
+      const newTodos = [
+        ...this.state.todos
+      ];
+      newTodo.id = response.data.id;
+      newTodos.push(newTodo);
+  
+      this.setState({
+        todos: newTodos,
+        newTodoContent: ''
+      });
+
+    })
+    .catch((error) => {
+      console.dir(error)
+    })
+  }
+
+  handleInputboxContentChanged(content) {
+    this.setState({
+      newTodoContent: content
+    });
   }
 
   handleItemToggle(todo, index) {
@@ -74,13 +114,16 @@ class Home extends Component {
   }
 
   render() {
-    const { todos } = this.state;
+    const { todos, newTodoContent } = this.state;
+    const onItemAddClickCallback = this.handleItemAddClick.bind(this);
+    const onInputboxContentChangedCallback = this.handleInputboxContentChanged.bind(this);
     const onItemToggleCallback = this.handleItemToggle.bind(this);
     const onItemEditClickCallback = this.handleItemEditClick.bind(this);
     const onItemDeleteClickCallback = this.handleItemDeleteClick.bind(this);
 
     return (
       <div>
+        <TodoInputbox content={newTodoContent} onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxContentChangedCallback}/>
         <TodoItemList data={todos} onItemToggle={onItemToggleCallback} onItemEditClick={onItemEditClickCallback} onItemDeleteClick={onItemDeleteClickCallback}/>
       </div>
     );
@@ -97,7 +140,10 @@ class Home extends Component {
       api.select(authToken)
       .then((response) => {
         console.log(response)
-        this.setState({spinner : false});
+        this.setState({
+          spinner : false,
+          authToken : authToken
+        });
 
         let todos = [];
         for(let i = 0; i < response.data.length; i++){
