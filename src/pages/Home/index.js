@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import api from '../../api';
 import TodoItemList from 'components/TodoItemList';
 import TodoInputbox from 'components/TodoInputbox';
+import Header from 'components/Header';
+import api from '../../api';
 
 class Home extends Component {
 
@@ -122,7 +123,8 @@ class Home extends Component {
     const onItemDeleteClickCallback = this.handleItemDeleteClick.bind(this);
 
     return (
-      <div>
+      <div className="Container">
+        <Header/>
         <TodoInputbox content={newTodoContent} onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxContentChangedCallback}/>
         <TodoItemList data={todos} onItemToggle={onItemToggleCallback} onItemEditClick={onItemEditClickCallback} onItemDeleteClick={onItemDeleteClickCallback}/>
       </div>

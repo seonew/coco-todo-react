@@ -49,7 +49,6 @@ body {
 
 .App {
   text-align: center;
-  padding: 1.5rem 2rem;
   margin: auto;
   display: flex;
   -ms-flex-wrap: wrap;
@@ -64,10 +63,6 @@ body {
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -88,6 +83,10 @@ body {
 .Layout {
   width: 100%;
   min-height: 100vh;
+}
+
+.Container {
+  padding: 1.5rem 2rem;
 }
 
 *, :after, :before {
