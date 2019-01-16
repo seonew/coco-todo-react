@@ -1,9 +1,8 @@
 import React from 'react';
-import Item from '../Item';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-
+import Item from '../Item';
 
 const styles = theme => ({
   root: {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import Header from 'components/Header';
 import TodoItemList from 'components/TodoItemList';
 import TodoInputbox from 'components/TodoInputbox';
-import Header from 'components/Header';
+import TodoEditModal from 'components/TodoEditModal';
 import api from '../../api';
 
 class Home extends Component {
@@ -12,6 +13,7 @@ class Home extends Component {
     this.state = {
       itemModalOpened: false,
       newTodoContent: '',
+      currentTodoContent: '',
       todos: [{
         state: 0,
         content: '',
@@ -22,14 +24,14 @@ class Home extends Component {
       }],
       spinner: true,
       authToken: '',
-      modalTodo: {
+      currentTodo: {
         content: '',
-        index: 0
+        state: 0,
+        id: ''
       },
       id: '',
     }
   }
-
 
   handleItemAddClick(todos) {
     const newTodo = {
@@ -102,31 +104,70 @@ class Home extends Component {
     api.delete(currentData)
   }
 
-  handleItemEditClick(todos) {
-    console.log("==handleItemEditClick==")
-    this.openItemModal(todos.contents);
+  handleModalContentEditClick(content){
+    const currentTodo = this.state.currentTodo
+    currentTodo.content = content;
+
+    let currentData = currentTodo;
+    currentData.authToken = this.state.authToken;
+
+    api.update(currentData)
+    .then(() => {
+      this.setState({
+        currentTodoContent: '',
+        itemModalOpened: false
+      });
+    })
+    .catch((error) => {
+      console.dir(error)
+    })
   }
 
-  openItemModal(todoContents) {
+  handleModalContentChanged(content) {
     this.setState({
-      modalTodo: todoContents,
+      currentTodoContent: content
+    });
+  }
+
+  handleItemEditClick(data) {
+    const todoContents = data.todo.content;
+    this.setState({
+      currentTodoContent: todoContents,
+      currentTodo: data.todo,
       itemModalOpened: true
     });
   }
 
+  handleModalClose() {
+    this.setState({
+      itemModalOpened: false
+    });
+  }
+
   render() {
-    const { todos, newTodoContent } = this.state;
-    const onItemAddClickCallback = this.handleItemAddClick.bind(this);
-    const onInputboxContentChangedCallback = this.handleInputboxContentChanged.bind(this);
-    const onItemToggleCallback = this.handleItemToggle.bind(this);
-    const onItemEditClickCallback = this.handleItemEditClick.bind(this);
-    const onItemDeleteClickCallback = this.handleItemDeleteClick.bind(this);
+    const { todos, newTodoContent, currentTodoContent, itemModalOpened } = this.state;
+    const onItemAddClickCallback        = this.handleItemAddClick.bind(this);
+    const onInputboxItemChangedCallback = this.handleInputboxContentChanged.bind(this);
+    const onItemToggleCallback          = this.handleItemToggle.bind(this);
+    const onItemDeleteClickCallback     = this.handleItemDeleteClick.bind(this);
+    const onItemEditClickCallback       = this.handleItemEditClick.bind(this);
+
+    const onModalItemChangedCallback    = this.handleModalContentChanged.bind(this);
+    const onModalItemEditClickCallback  = this.handleModalContentEditClick.bind(this);
+    const onModalCloseClickCallback     = this.handleModalClose.bind(this);
 
     return (
       <div className="Container">
         <Header/>
-        <TodoInputbox content={newTodoContent} onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxContentChangedCallback}/>
-        <TodoItemList data={todos} onItemToggle={onItemToggleCallback} onItemEditClick={onItemEditClickCallback} onItemDeleteClick={onItemDeleteClickCallback}/>
+        <TodoInputbox content={newTodoContent} 
+          onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxItemChangedCallback}/
+        >
+        <TodoItemList data={todos} 
+          onItemToggle={onItemToggleCallback} onItemEditClick={onItemEditClickCallback} onItemDeleteClick={onItemDeleteClickCallback}
+        />
+        <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
+          onContentEditClick={onModalItemEditClickCallback} onContentChanged={onModalItemChangedCallback} onCloseClick={onModalCloseClickCallback} 
+        />
       </div>
     );
   }

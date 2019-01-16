@@ -8,45 +8,55 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 class Item extends React.Component {
-  
-  handleToggle(event) {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      opend: false
+    }
+  }
+
+  handleToggle() {
     const { onToggle, todo } = this.props;
     onToggle({todo});
   };
 
-  handleEditClick(event) {
-    console.log("==handleEditClick==")
+  handleEditClick() {
+    this.setState({ opend: true });
+
     const { onEditClick, todo } = this.props;
     onEditClick({todo});
   }
 
-  handleDeleteClick(event) {
+  handleDeleteClick() {
     const { onDeleteClick, todo } = this.props;
     onDeleteClick({todo})
   }
 
   render () {
-    const { content, registerDate, editedDate, state } = this.props.todo;
+    const { content, state } = this.props.todo;
     const onToggleClickCallback = this.handleToggle.bind(this);
     const onEditClickCallback   = this.handleEditClick.bind(this);
     const onDeleteClickCallback = this.handleDeleteClick.bind(this);
 
     return (
-      <ListItem dense button>
-        <Checkbox
-          checked={state !== 0}
-          onChange={onToggleClickCallback}
-        />
-        <ListItemText primary={content} />
-        <ListItemSecondaryAction>
-          <IconButton aria-label="Edit" onClick={onEditClickCallback} >
-            <EditIcon fontSize="small" />
-          </IconButton>
-          <IconButton aria-label="Delete" onClick={onDeleteClickCallback} >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+      <div>
+        <ListItem dense button>
+          <Checkbox
+            checked={state !== 0}
+            onChange={onToggleClickCallback}
+          />
+          <ListItemText primary={content} />
+          <ListItemSecondaryAction>
+            <IconButton aria-label="Edit" onClick={onEditClickCallback} >
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton aria-label="Delete" onClick={onDeleteClickCallback} >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </div>
     );
   }
 
