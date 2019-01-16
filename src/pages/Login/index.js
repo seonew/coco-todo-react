@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -79,7 +80,7 @@ class Login extends React.Component {
               fullWidth
               variant="outlined"
             />
-            <Button variant="contained" size="medium" color="primary" fullWidth className={[classes.margin, classes.bold]} onClick={this.authorize}>
+            <Button variant="contained" size="medium" color="primary" fullWidth className={classNames(classes.margin, classes.bold)} onClick={this.authorize}>
               LOGIN
             </Button>
           </form>
