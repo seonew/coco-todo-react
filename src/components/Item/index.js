@@ -8,14 +8,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 class Item extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      opend: false
-    }
-  }
-
   handleToggle() {
     const { onToggle, todo } = this.props;
     onToggle({todo});
