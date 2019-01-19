@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
+import Spinner from 'components/Spinner';
 import api from '../../api';
 
 const styles = theme => ({
@@ -29,16 +30,26 @@ const styles = theme => ({
   margin: {
     marginTop: '20px'
   },
+  logo: {
+    fontFamily: "Righteous",
+    fontSize: "4rem",
+    fontWeight: "lighter",
+    lineHeight: 1,
+    letterSpacing: 2,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "3rem"
+    }
+  },
 });
 
 class Login extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       id: '',
-      password: ''
+      password: '',
+      showSpinner: false
     }
   }
 
@@ -49,13 +60,14 @@ class Login extends React.Component {
   });
 
   render () {
+    const { showSpinner } = this.state;
     const { classes } = this.props;
-
+    
     return (
       <div className={classes.root}>
-        <div className={classes.container}>
+        <div className={classNames(classes.container, showSpinner ? "dimmer":"")}>
           <div className={classes.titleWrapper}>
-            <Typography color={"primary"} variant="h4" className={classes.bold}>
+            <Typography color={"primary"} className={classes.logo}>
               COCO TODO
             </Typography>
           </div>
@@ -85,6 +97,7 @@ class Login extends React.Component {
             </Button>
           </form>
         </div>
+        <Spinner show={showSpinner} ></Spinner>
       </div>
     );
   }
@@ -106,16 +119,20 @@ class Login extends React.Component {
       this.errorPW = true
       return
     }
-      
+
+    this.setState({ showSpinner: true });
+
     api.authorize(id, password)
     .then((response) => {
       console.log(response)
-      
+      this.setState({ showSpinner: false });
+
       localStorage.setItem('authToken', response.data.token);
       window.location.href = "/"
     })
     .catch((error) => {
       console.dir(error)
+      this.setState({ showSpinner: false });
       alert(error.response.data)
       return
     })

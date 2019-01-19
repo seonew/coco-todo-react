@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import Header from 'components/Header';
 import TodoItemList from 'components/TodoItemList';
 import TodoInputbox from 'components/TodoInputbox';
 import TodoEditModal from 'components/TodoEditModal';
+import Spinner from 'components/Spinner';
 import api from '../../api';
 
 class Home extends Component {
@@ -22,7 +24,7 @@ class Home extends Component {
         checked: false,
         loading: false
       }],
-      spinner: true,
+      showSpinner: true,
       authToken: '',
       currentTodo: {
         content: '',
@@ -145,7 +147,7 @@ class Home extends Component {
   }
 
   render() {
-    const { todos, newTodoContent, currentTodoContent, itemModalOpened } = this.state;
+    const { todos, newTodoContent, currentTodoContent, itemModalOpened, showSpinner } = this.state;
     const onItemAddClickCallback        = this.handleItemAddClick.bind(this);
     const onInputboxItemChangedCallback = this.handleInputboxContentChanged.bind(this);
     const onItemToggleCallback          = this.handleItemToggle.bind(this);
@@ -157,7 +159,7 @@ class Home extends Component {
     const onModalCloseClickCallback     = this.handleModalClose.bind(this);
 
     return (
-      <div className="Container">
+      <div className={classNames("Container", showSpinner ? "dimmer":"")}>
         <Header/>
         <TodoInputbox content={newTodoContent} 
           onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxItemChangedCallback}/
@@ -168,23 +170,23 @@ class Home extends Component {
         <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
           onContentEditClick={onModalItemEditClickCallback} onContentChanged={onModalItemChangedCallback} onCloseClick={onModalCloseClickCallback} 
         />
+        <Spinner show={showSpinner}></Spinner>
       </div>
     );
   }
 
-
   init() {
-    let authToken = localStorage.getItem('authToken');
+    const authToken = localStorage.getItem('authToken');
 
-    if(authToken === 'undefined' || authToken === null) {
-      window.location.href = "/login"
+    if (authToken === 'undefined' || authToken === null) {
+      window.location.href = "/login";
     }
     else {
       api.select(authToken)
       .then((response) => {
         console.log(response)
         this.setState({
-          spinner : false,
+          showSpinner : false,
           authToken : authToken
         });
 
@@ -197,6 +199,9 @@ class Home extends Component {
       })
       .catch((error) => {
         console.dir(error)
+        this.setState({
+          showSpinner : false,
+        });
         window.location.href = "/login"
       })
     }
