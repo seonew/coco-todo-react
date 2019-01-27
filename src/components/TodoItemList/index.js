@@ -12,8 +12,7 @@ const styles = theme => ({
 });
 
 class TodoItemList extends React.Component {
-
-  handleItemToggleClick(current) {
+  handleItemToggleClick = current => {
     const { onItemToggle, data } = this.props;
     const todo = current["todo"];
 
@@ -24,16 +23,15 @@ class TodoItemList extends React.Component {
         break;
       }
     }
-
     onItemToggle(todo, index);
   }
 
-  handleItemEditClick(todo) {
+  handleItemEditClick = todo => {
     const { onItemEditClick } = this.props;
     onItemEditClick(todo);
   }
 
-  handleItemDeleteClick(current) {
+  handleItemDeleteClick = current => {
     const { onItemDeleteClick, data } = this.props;
     const todo = current["todo"];
 
@@ -49,12 +47,8 @@ class TodoItemList extends React.Component {
 
   render() {
     const { data, classes } = this.props;
-    const onToggleCallback = this.handleItemToggleClick.bind(this);
-    const onEditClickCallback = this.handleItemEditClick.bind(this);
-    const onDeleteClickCallback = this.handleItemDeleteClick.bind(this);
-
     const list = data.map(
-      (todo, index) => (<Item key={index} todo={todo} onToggle={onToggleCallback} onEditClick={onEditClickCallback} onDeleteClick={onDeleteClickCallback}/>)
+      (todo, index) => (<Item key={index} todo={todo} onToggle={this.handleItemToggleClick} onEditClick={this.handleItemEditClick} onDeleteClick={this.handleItemDeleteClick}/>)
     );
     
     return (

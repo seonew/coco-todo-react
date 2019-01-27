@@ -31,7 +31,7 @@ class TodoEditModal extends React.Component {
     onCloseClick();
   };
 
-  handleContentEditClick() {
+  handleContentEditClick = () => {
     const { onContentEditClick, content } = this.props;
     onContentEditClick(content);
   }
@@ -43,13 +43,10 @@ class TodoEditModal extends React.Component {
 
   render() {
     const { classes, content, open } = this.props;
-    const onContentEditCallback     = this.handleContentEditClick.bind(this);
-    const onContentChangedCallback  = this.handleContentChanged.bind(this);
-    const onCloseCallback           = this.handleClose.bind(this);
 
     return (
       <div className={classes.root}>
-        <Dialog open={open} onClose={onCloseCallback} aria-labelledby="form-dialog-title">
+        <Dialog open={open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Edit a todo</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -63,14 +60,14 @@ class TodoEditModal extends React.Component {
               value={content}
               multiline
               fullWidth
-              onChange={onContentChangedCallback}
+              onChange={this.handleContentChanged}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={onCloseCallback} color="primary">
+            <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={onContentEditCallback} color="primary">
+            <Button onClick={this.handleContentEditClick} color="primary">
               Confirm
             </Button>
           </DialogActions>

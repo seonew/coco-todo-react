@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import Header from 'components/Header';
 import TodoItemList from 'components/TodoItemList';
 import TodoInputbox from 'components/TodoInputbox';
@@ -16,14 +15,7 @@ class Home extends Component {
       itemModalOpened: false,
       newTodoContent: '',
       currentTodoContent: '',
-      todos: [{
-        state: 0,
-        content: '',
-        registerDate: '',
-        editedDate: '',
-        checked: false,
-        loading: false
-      }],
+      todos: [],
       showSpinner: true,
       authToken: '',
       currentTodo: {
@@ -35,7 +27,7 @@ class Home extends Component {
     }
   }
 
-  handleItemAddClick(todos) {
+  handleItemAddClick = todos => {
     const newTodo = {
       state: 0,
       content: '',
@@ -68,13 +60,13 @@ class Home extends Component {
     })
   }
 
-  handleInputboxContentChanged(content) {
+  handleInputboxContentChanged = content => {
     this.setState({
       newTodoContent: content
     });
   }
 
-  handleItemToggle(todo, index) {
+  handleItemToggle = (todo, index) => {
     const newTodos = [
       ...this.state.todos
     ];
@@ -90,7 +82,7 @@ class Home extends Component {
     api.changeTodoState(currentData)
   }
 
-  handleItemDeleteClick(index) {
+  handleItemDeleteClick = index => {
     const newTodos = [
       ...this.state.todos
     ];
@@ -106,7 +98,7 @@ class Home extends Component {
     api.delete(currentData)
   }
 
-  handleModalContentEditClick(content){
+  handleModalContentEditClick = content => {
     const currentTodo = this.state.currentTodo
     currentTodo.content = content;
 
@@ -125,13 +117,13 @@ class Home extends Component {
     })
   }
 
-  handleModalContentChanged(content) {
+  handleModalContentChanged = content => {
     this.setState({
       currentTodoContent: content
     });
   }
 
-  handleItemEditClick(data) {
+  handleItemEditClick = data => {
     const todoContents = data.todo.content;
     this.setState({
       currentTodoContent: todoContents,
@@ -140,7 +132,7 @@ class Home extends Component {
     });
   }
 
-  handleModalClose() {
+  handleModalClose = () => {
     this.setState({
       itemModalOpened: false
     });
@@ -148,28 +140,21 @@ class Home extends Component {
 
   render() {
     const { todos, newTodoContent, currentTodoContent, itemModalOpened, showSpinner } = this.state;
-    const onItemAddClickCallback        = this.handleItemAddClick.bind(this);
-    const onInputboxItemChangedCallback = this.handleInputboxContentChanged.bind(this);
-    const onItemToggleCallback          = this.handleItemToggle.bind(this);
-    const onItemDeleteClickCallback     = this.handleItemDeleteClick.bind(this);
-    const onItemEditClickCallback       = this.handleItemEditClick.bind(this);
-
-    const onModalItemChangedCallback    = this.handleModalContentChanged.bind(this);
-    const onModalItemEditClickCallback  = this.handleModalContentEditClick.bind(this);
-    const onModalCloseClickCallback     = this.handleModalClose.bind(this);
 
     return (
-      <div className={classNames("Container", showSpinner ? "dimmer":"")}>
-        <Header/>
-        <TodoInputbox content={newTodoContent} 
-          onItemAddClick={onItemAddClickCallback} onContentChanged={onInputboxItemChangedCallback}/
-        >
-        <TodoItemList data={todos} 
-          onItemToggle={onItemToggleCallback} onItemEditClick={onItemEditClickCallback} onItemDeleteClick={onItemDeleteClickCallback}
-        />
-        <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
-          onContentEditClick={onModalItemEditClickCallback} onContentChanged={onModalItemChangedCallback} onCloseClick={onModalCloseClickCallback} 
-        />
+      <div className="Container">
+        <div className={showSpinner ? "dimmer":""}>
+          <Header/>
+          <TodoInputbox content={newTodoContent} 
+            onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
+          >
+          <TodoItemList data={todos} 
+            onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleItemDeleteClick}
+          />
+          <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
+            onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
+          />
+        </div>
         <Spinner show={showSpinner}></Spinner>
       </div>
     );

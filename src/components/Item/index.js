@@ -8,42 +8,39 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 class Item extends React.Component {
-  handleToggle() {
+  handleToggle = () => {
     const { onToggle, todo } = this.props;
     onToggle({todo});
   };
 
-  handleEditClick() {
+  handleEditClick = () => {
     this.setState({ opend: true });
 
     const { onEditClick, todo } = this.props;
     onEditClick({todo});
   }
 
-  handleDeleteClick() {
+  handleDeleteClick = () => {
     const { onDeleteClick, todo } = this.props;
     onDeleteClick({todo})
   }
 
   render () {
     const { content, state } = this.props.todo;
-    const onToggleClickCallback = this.handleToggle.bind(this);
-    const onEditClickCallback   = this.handleEditClick.bind(this);
-    const onDeleteClickCallback = this.handleDeleteClick.bind(this);
 
     return (
       <div>
         <ListItem dense button>
           <Checkbox
             checked={state !== 0}
-            onChange={onToggleClickCallback}
+            onChange={this.handleToggle}
           />
           <ListItemText primary={content} />
           <ListItemSecondaryAction>
-            <IconButton aria-label="Edit" onClick={onEditClickCallback} >
+            <IconButton aria-label="Edit" onClick={this.handleEditClick} >
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton aria-label="Delete" onClick={onDeleteClickCallback} >
+            <IconButton aria-label="Delete" onClick={this.handleDeleteClick} >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </ListItemSecondaryAction>

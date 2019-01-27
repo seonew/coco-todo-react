@@ -22,7 +22,7 @@ const styles = theme => ({
 });
 
 class TodoItemInputbox extends React.Component {
-  handleItemAddClick() {
+  handleItemAddClick = () => {
     const { onItemAddClick, content } = this.props;
     onItemAddClick(content);
   }
@@ -34,8 +34,6 @@ class TodoItemInputbox extends React.Component {
 
   render() {
     const { classes, content } = this.props;
-    const onAddClickCallback = this.handleItemAddClick.bind(this);
-    const onContentChangedCallback = this.handleContentChanged.bind(this);
 
     return (
       <div className={classes.root}>
@@ -43,7 +41,7 @@ class TodoItemInputbox extends React.Component {
             id="standard-input"
             label="Add a todo"
             value={content}
-            onChange={onContentChangedCallback}
+            onChange={this.handleContentChanged}
             margin="normal"
             variant="outlined"
             fullWidth
@@ -51,7 +49,7 @@ class TodoItemInputbox extends React.Component {
               endAdornment: (
                 <InputAdornment variant="filled" position="end">
                   <Divider className={classes.divider} />
-                  <IconButton color="secondary" aria-label="Add" onClick={onAddClickCallback}>
+                  <IconButton color="secondary" aria-label="Add" onClick={this.handleItemAddClick}>
                     <AddIcon />
                   </IconButton>
                 </InputAdornment>
