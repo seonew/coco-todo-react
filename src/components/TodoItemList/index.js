@@ -9,6 +9,9 @@ const styles = theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  padding: {
+    padding: '0 5px'
+  }
 });
 
 class TodoItemList extends React.Component {
@@ -53,7 +56,7 @@ class TodoItemList extends React.Component {
     
     return (
       <div className={classes.root}>
-        <List>
+        <List className={classes.padding}>
           {list}
         </List>
       </div>

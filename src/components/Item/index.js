@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -6,6 +8,26 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+const styles = theme => ({
+  padding: {
+    padding: '0.3em',
+  },
+  side: {
+    float: 'right',
+  },
+  content: {
+    flex: 'inherit',
+    width: '90%',
+    padding: '0 0.5em',
+    [theme.breakpoints.down("md")]: {
+      width: '85%',
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: '72%',
+    }
+  }
+});
 
 class Item extends React.Component {
   handleToggle = () => {
@@ -26,21 +48,23 @@ class Item extends React.Component {
   }
 
   render () {
+    const { classes } = this.props;
     const { content, state } = this.props.todo;
 
     return (
-      <div>
-        <ListItem dense button>
+      <div className={classes.padding}>
+        <ListItem dense button className={classes.padding}>
           <Checkbox
             checked={state !== 0}
             onChange={this.handleToggle}
+            className={classes.padding}
           />
-          <ListItemText primary={content} />
-          <ListItemSecondaryAction>
-            <IconButton aria-label="Edit" onClick={this.handleEditClick} >
+          <ListItemText primary={content} className={classes.content}/>
+          <ListItemSecondaryAction className={classes.side}>
+            <IconButton aria-label="Edit" onClick={this.handleEditClick} className={classes.padding}>
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton aria-label="Delete" onClick={this.handleDeleteClick} >
+            <IconButton aria-label="Delete" onClick={this.handleDeleteClick} className={classes.padding} >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </ListItemSecondaryAction>
@@ -69,4 +93,8 @@ class Item extends React.Component {
   }
 }
 
-export default Item;
+Item.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Item);

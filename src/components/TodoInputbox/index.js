@@ -9,7 +9,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = theme => ({
   root: {
-    padding: '2px 4px',
+    padding: '2px 10px',
     display: 'flex',
     alignItems: 'center',
     width: '100%',

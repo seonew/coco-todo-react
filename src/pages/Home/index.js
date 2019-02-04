@@ -142,20 +142,19 @@ class Home extends Component {
     const { todos, newTodoContent, currentTodoContent, itemModalOpened, showSpinner } = this.state;
 
     return (
-      <div className="Container">
-        <div className={showSpinner ? "dimmer":""}>
-          <Header/>
-          <TodoInputbox content={newTodoContent} 
-            onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
-          >
-          <TodoItemList data={todos} 
-            onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleItemDeleteClick}
-          />
-          <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
-            onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
-          />
-        </div>
+      <div>
+        <Header/>
+        <TodoInputbox content={newTodoContent} 
+          onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
+        >
+        <TodoItemList data={todos} 
+          onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleItemDeleteClick}
+        />
+        <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
+          onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
+        />
         <Spinner show={showSpinner}></Spinner>
+        <div className={showSpinner ? "dimmer":""}></div>
       </div>
     );
   }
