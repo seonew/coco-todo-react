@@ -3,6 +3,7 @@ import Header from 'components/Header';
 import TodoItemList from 'components/TodoItemList';
 import TodoInputbox from 'components/TodoInputbox';
 import TodoEditModal from 'components/TodoEditModal';
+import ConfirmModal from 'components/ConfirmModal';
 import Spinner from 'components/Spinner';
 import api from '../../api';
 
@@ -12,16 +13,20 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      itemModalOpened: false,
-      newTodoContent: '',
+      editModalOpened: false,
+      confirmModalOpened: false,
+      confirmMessage: '',
+      currentTodoIndex: -1,
       currentTodoContent: '',
+      newTodoContent: '',
       todos: [],
       showSpinner: true,
       authToken: '',
       currentTodo: {
         content: '',
         state: 0,
-        id: ''
+        id: '',
+        index: -1
       },
       id: '',
     }
@@ -82,20 +87,27 @@ class Home extends Component {
     api.changeTodoState(currentData)
   }
 
-  handleItemDeleteClick = index => {
+  handleItemDeleteClick = () => {
+    const index = this.state.currentTodoIndex;
     const newTodos = [
       ...this.state.todos
     ];
     newTodos.splice(index, 1);
 
     this.setState({
-      todos: newTodos
+      todos: newTodos,
     });
-
+    
     let currentData = this.state.todos[index];
     currentData.authToken = this.state.authToken;
 
     api.delete(currentData)
+    .then(() => {
+      this.setState({
+        currentTodoIndex: -1,
+        confirmModalOpened: false
+      });
+    })
   }
 
   handleModalContentEditClick = content => {
@@ -109,7 +121,7 @@ class Home extends Component {
     .then(() => {
       this.setState({
         currentTodoContent: '',
-        itemModalOpened: false
+        editModalOpened: false
       });
     })
     .catch((error) => {
@@ -128,18 +140,29 @@ class Home extends Component {
     this.setState({
       currentTodoContent: todoContents,
       currentTodo: data.todo,
-      itemModalOpened: true
+      editModalOpened: true
+    });
+  }
+
+  handleConfirmModalClick = index => {
+    const currentTodoContent = this.state.todos[index].content;
+    this.setState({
+      confirmMessage: 'Are you sure you want to delete?',
+      currentTodoIndex: index,
+      currentTodoContent: currentTodoContent,
+      confirmModalOpened: true
     });
   }
 
   handleModalClose = () => {
     this.setState({
-      itemModalOpened: false
+      editModalOpened: false,
+      confirmModalOpened: false
     });
   }
 
   render() {
-    const { todos, newTodoContent, currentTodoContent, itemModalOpened, showSpinner } = this.state;
+    const { todos, newTodoContent, currentTodoContent, editModalOpened, confirmModalOpened, confirmMessage, showSpinner } = this.state;
 
     return (
       <div>
@@ -148,10 +171,13 @@ class Home extends Component {
           onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
         >
         <TodoItemList data={todos} 
-          onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleItemDeleteClick}
+          onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleConfirmModalClick}
         />
-        <TodoEditModal content={currentTodoContent} open={itemModalOpened} 
+        <TodoEditModal content={currentTodoContent} open={editModalOpened} 
           onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
+        />
+        <ConfirmModal open={confirmModalOpened} message={confirmMessage} todoContent={currentTodoContent}
+          onConfirmClick={this.handleItemDeleteClick} onCloseClick={this.handleModalClose} 
         />
         <Spinner show={showSpinner}></Spinner>
         <div className={showSpinner ? "dimmer":""}></div>
