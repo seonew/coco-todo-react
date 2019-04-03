@@ -108,3 +108,33 @@ body {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
 }
+
+.donutchart-track{
+  fill: transparent;
+  stroke: #DAE2E5;
+  stroke-width: 5;
+}
+.donutchart-indicator {
+  fill: transparent;
+  stroke: #00bcd4;
+  stroke-width: 5;
+  stroke-dasharray: 0 10000;
+  transition: stroke-dasharray .3s ease;
+}
+
+.donutchart {
+  margin: 0 auto;
+  border-radius: 50%;
+  display: block;
+}
+
+.donutchart-text{
+  font-family: 'Roboto';
+  fill: #607580;
+}
+.donutchart-text-val{
+  font-size: 13px;
+}
+.donutchart-text-percent{
+  font-size: 9px;
+}
