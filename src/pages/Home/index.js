@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from 'components/Header';
-import TodoItemList from 'components/TodoItemList';
+import TodoList from 'components/TodoList';
 import TodoInputbox from 'components/TodoInputbox';
 import TodoEditModal from 'components/TodoEditModal';
 import ConfirmModal from 'components/ConfirmModal';
@@ -170,7 +170,7 @@ class Home extends Component {
         <TodoInputbox content={newTodoContent} 
           onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
         >
-        <TodoItemList data={todos} 
+        <TodoList data={todos} 
           onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleConfirmModalClick}
         />
         <TodoEditModal content={currentTodoContent} open={editModalOpened} 

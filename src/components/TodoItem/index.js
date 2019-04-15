@@ -20,6 +20,7 @@ const styles = theme => ({
     flex: 'inherit',
     width: '90%',
     padding: '0 0.5em',
+    wordBreak: 'break-all',
     [theme.breakpoints.down("md")]: {
       width: '85%',
     },
@@ -29,7 +30,7 @@ const styles = theme => ({
   }
 });
 
-class Item extends React.Component {
+class TodoItem extends React.Component {
   handleToggle = () => {
     const { onToggle, todo } = this.props;
     onToggle({todo});
@@ -93,8 +94,8 @@ class Item extends React.Component {
   }
 }
 
-Item.propTypes = {
+TodoItem.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Item);
+export default withStyles(styles)(TodoItem);

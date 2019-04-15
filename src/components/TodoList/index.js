@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import Item from '../Item';
+import TodoItem from '../TodoItem';
 
 const styles = theme => ({
   root: {
@@ -11,10 +11,13 @@ const styles = theme => ({
   },
   padding: {
     padding: '0 5px'
-  }
+  },
+  nested: {
+    paddingLeft: theme.spacing.unit * 4,
+  },
 });
 
-class TodoItemList extends React.Component {
+class TodoList extends React.Component {
   handleItemToggleClick = current => {
     const { onItemToggle, data } = this.props;
     const todo = current["todo"];
@@ -51,7 +54,7 @@ class TodoItemList extends React.Component {
   render() {
     const { data, classes } = this.props;
     const list = data.map(
-      (todo, index) => (<Item key={index} todo={todo} onToggle={this.handleItemToggleClick} onEditClick={this.handleItemEditClick} onDeleteClick={this.handleItemDeleteClick}/>)
+      (todo, index) => (<TodoItem key={index} todo={todo} onToggle={this.handleItemToggleClick} onEditClick={this.handleItemEditClick} onDeleteClick={this.handleItemDeleteClick}/>)
     );
     
     return (
@@ -68,8 +71,8 @@ class TodoItemList extends React.Component {
   }
 }
 
-TodoItemList.propTypes = {
+TodoList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TodoItemList);
+export default withStyles(styles)(TodoList);
