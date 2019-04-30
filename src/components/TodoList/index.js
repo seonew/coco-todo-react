@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import TodoItem from '../TodoItem';
+import TodoItem from 'components/TodoItem';
+import MenuDrawer from 'components/MenuDrawer';
 
 const styles = theme => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+    paddingTop: '8px',
   },
   padding: {
     padding: '0 5px'
@@ -18,6 +20,11 @@ const styles = theme => ({
 });
 
 class TodoList extends React.Component {
+  state = {
+    menuOpen: false,
+    todo: {},
+  }
+
   handleItemToggleClick = current => {
     const { onItemToggle, data } = this.props;
     const todo = current["todo"];
@@ -37,6 +44,10 @@ class TodoList extends React.Component {
     onItemEditClick(todo);
   }
 
+  handleSettingItemEditClick = todo => {
+    this.setState({todo: todo});
+  }
+
   handleItemDeleteClick = current => {
     const { onItemDeleteClick, data } = this.props;
     const todo = current["todo"];
@@ -51,10 +62,16 @@ class TodoList extends React.Component {
     onItemDeleteClick(index);
   }
 
+  handleMenuChanged = (event, menuOpen) => {
+    event.stopPropagation();
+    this.setState({menuOpen: !menuOpen});
+  }
+
   render() {
     const { data, classes } = this.props;
     const list = data.map(
-      (todo, index) => (<TodoItem key={index} todo={todo} onToggle={this.handleItemToggleClick} onEditClick={this.handleItemEditClick} onDeleteClick={this.handleItemDeleteClick}/>)
+      (todo, index) => (<TodoItem key={index} todo={todo} menuOpen={this.state.menuOpen} 
+              onMenuOpenChanged={this.handleMenuChanged} onToggle={this.handleItemToggleClick} onEditClick={this.handleSettingItemEditClick} onDeleteClick={this.handleItemDeleteClick}/>)
     );
     
     return (
@@ -62,13 +79,16 @@ class TodoList extends React.Component {
         <List className={classes.padding}>
           {list}
         </List>
+        {this.state.menuOpen ? <MenuDrawer open={this.state.menuOpen} todo={this.state.todo} 
+              onMenuOpenChanged={this.handleMenuChanged} onEditClick={this.handleItemEditClick} onDeleteClick={this.handleItemDeleteClick}/> : ''}
       </div>
     );
   }
 
-  static defaultProps = {
-    data: []
-  }
+}
+
+TodoList.defaultProps = {
+  data: []
 }
 
 TodoList.propTypes = {

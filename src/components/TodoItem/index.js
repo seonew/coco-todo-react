@@ -2,96 +2,96 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import MoreVert from '@material-ui/icons/MoreVert';
+import Divider from '@material-ui/core/Divider';
+import DonutChart from 'components/DonutChart';
+import CheckList from 'components/CheckList';
 
 const styles = theme => ({
   padding: {
-    padding: '0.3em',
+    padding: '0.25rem',
   },
   side: {
     float: 'right',
   },
   content: {
     flex: 'inherit',
-    width: '90%',
-    padding: '0 0.5em',
+    width: '95%',
+    padding: '0 0.5rem',
     wordBreak: 'break-all',
+    [theme.breakpoints.down("lg")]: {
+      width: '95%',
+      padding: '0.3rem 1.3rem',
+    },
     [theme.breakpoints.down("md")]: {
-      width: '85%',
+      width: '90%',
     },
     [theme.breakpoints.down("xs")]: {
-      width: '72%',
+      width: '80%',
+      paddingRight: '0.5rem',
+      padding: '0.3rem 0.8rem',
     }
+  },
+  moreButton: {
+    visibility: 'hidden',
   }
 });
 
 class TodoItem extends React.Component {
+  state = {
+    open: false,
+  }
+
   handleToggle = () => {
     const { onToggle, todo } = this.props;
     onToggle({todo});
   };
 
-  handleEditClick = () => {
-    this.setState({ opend: true });
-
-    const { onEditClick, todo } = this.props;
-    onEditClick({todo});
+  handleExpandChanged = () => {
+    this.setState({open: !this.state.open});
   }
 
-  handleDeleteClick = () => {
-    const { onDeleteClick, todo } = this.props;
-    onDeleteClick({todo})
+  handleMenuChanged = event => {
+    const { onMenuOpenChanged, menuOpen, onEditClick, todo } = this.props;
+    onEditClick(todo);
+    onMenuOpenChanged(event, menuOpen);
   }
 
   render () {
     const { classes } = this.props;
-    const { content, state } = this.props.todo;
+    const { content, checklist } = this.props.todo;
 
     return (
       <div className={classes.padding}>
-        <ListItem dense button className={classes.padding}>
-          <Checkbox
-            checked={state !== 0}
-            onChange={this.handleToggle}
-            className={classes.padding}
-          />
+        <ListItem  button className={classes.padding} onClick={this.handleExpandChanged}>
+          <DonutChart value={this.getAchievementRate(checklist)} />
           <ListItemText primary={content} className={classes.content}/>
-          <ListItemSecondaryAction className={classes.side}>
-            <IconButton aria-label="Edit" onClick={this.handleEditClick} className={classes.padding}>
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton aria-label="Delete" onClick={this.handleDeleteClick} className={classes.padding} >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </ListItemSecondaryAction>
+          <MoreVert color="secondary" size="medium" className={this.state.open ? '' : classes.moreButton} onClick={this.handleMenuChanged}/>
         </ListItem>
+        <Divider variant="inset" component="li" />
+        <CheckList checklist={checklist} state={this.state.open}/>
       </div>
     );
   }
 
-  getDate(timestampParam) {
-    let date = new Date(timestampParam);
-
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    if (month < 10) {
-      month = "0" + month;
+  getAchievementRate = (checklist) => {
+    const listSize = checklist.length;
+    let count = 0;
+    checklist.forEach(element => {
+      if(element.state === 1){
+        count++;
+      }
+    });
+    
+    let result = 0;
+    if(listSize > 0){
+      result = parseInt((count/listSize)*100);
     }
 
-    if (day < 10) {
-      day = "0" + day;
-    }
-
-    let result = [year, month, day].join("-");
     return result;
   }
+
 }
 
 TodoItem.propTypes = {
