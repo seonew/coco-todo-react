@@ -104,7 +104,7 @@ class Login extends React.Component {
 
 
   authorize = () => {
-    let { id, password } = this.state;
+    const { id, password } = this.state;
 
     if (id === '' && password === ''){
       this.errorEmail = true
