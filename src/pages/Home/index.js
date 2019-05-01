@@ -1,11 +1,19 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import Header from 'components/Header';
 import TodoList from 'components/TodoList';
-import TodoInputbox from 'components/TodoInputbox';
 import TodoEditModal from 'components/TodoEditModal';
 import ConfirmModal from 'components/ConfirmModal';
 import Spinner from 'components/Spinner';
+import AddButton from 'components/AddButton';
+import TodoInputDrawer from 'components/TodoInputDrawer';
 import api from '../../api';
+
+const styles = () => ({
+  content: {
+    marginTop: '64px'
+  }
+});
 
 class Home extends React.Component {
 
@@ -29,10 +37,17 @@ class Home extends React.Component {
         index: -1
       },
       id: '',
+      inputVisible: false,
+
     }
   }
 
   handleItemAddClick = todos => {
+    if(todos.length === 0){
+      alert('Please enter at least 1 letter.')
+      return;
+    }
+
     const newTodo = {
       state: 0,
       content: '',
@@ -161,24 +176,36 @@ class Home extends React.Component {
     });
   }
 
+  handleInputVisible = () => {
+    this.setState({
+      inputVisible: !this.state.inputVisible,
+    });
+  }
+
   render() {
     const { todos, newTodoContent, currentTodoContent, editModalOpened, confirmModalOpened, confirmMessage, showSpinner } = this.state;
+    const { classes } = this.props;
 
     return (
       <div>
         <Header/>
-        <TodoInputbox content={newTodoContent} 
-          onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
-        >
-        <TodoList data={todos} 
-          onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleConfirmModalClick}
-        />
-        <TodoEditModal content={currentTodoContent} open={editModalOpened} 
-          onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
-        />
-        <ConfirmModal open={confirmModalOpened} message={confirmMessage} todoContent={currentTodoContent}
-          onConfirmClick={this.handleItemDeleteClick} onCloseClick={this.handleModalClose} 
-        />
+        <div className={classes.content}>
+          <TodoList data={todos} 
+            onItemToggle={this.handleItemToggle} onItemEditClick={this.handleItemEditClick} onItemDeleteClick={this.handleConfirmModalClick}
+          />
+          {this.state.inputVisible ?
+            <TodoInputDrawer content={newTodoContent} 
+              open={this.state.inputVisible} onInputVisibleChanged={this.handleInputVisible}
+              onItemAddClick={this.handleItemAddClick} onContentChanged={this.handleInputboxContentChanged}/
+            > : <AddButton show={!showSpinner} onInputVisibleChanged={this.handleInputVisible}/>
+          }
+          <TodoEditModal content={currentTodoContent} open={editModalOpened} 
+            onContentEditClick={this.handleModalContentEditClick} onContentChanged={this.handleModalContentChanged} onCloseClick={this.handleModalClose} 
+          />
+          <ConfirmModal open={confirmModalOpened} message={confirmMessage} todoContent={currentTodoContent}
+            onConfirmClick={this.handleItemDeleteClick} onCloseClick={this.handleModalClose} 
+          />
+        </div>
         <Spinner show={showSpinner}></Spinner>
         <div className={showSpinner ? "dimmer":""}></div>
       </div>
@@ -223,4 +250,4 @@ class Home extends React.Component {
 
 };
 
-export default Home;
+export default withStyles(styles)(Home);

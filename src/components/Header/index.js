@@ -10,6 +10,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 const styles = theme => ({
   root: {
     flexGrow: 1,
+    position: 'fixed',
+    width: '100%',
+    top: '0',
+    zIndex: '100',
   },
   init: {
     padding: '0',
@@ -19,7 +23,7 @@ const styles = theme => ({
   },
   menu: {
     color: 'white',
-    padding: '0.8em',
+    padding: '0.8rem',
   },
   logo: {
     fontFamily: "Righteous",
@@ -59,7 +63,6 @@ class Header extends React.Component {
     );
   }
 }
-
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
