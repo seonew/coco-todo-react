@@ -54,12 +54,6 @@ class TodoInputDrawer extends React.Component {
     open: false,
   };
 
-  toggleDrawer = (side, open) => () => {
-    this.setState({
-      [side]: open,
-    });
-  };
-
   handleItemAddClick = () => {
     const { onItemAddClick, content } = this.props;
     onItemAddClick(content);

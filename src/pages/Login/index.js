@@ -133,8 +133,7 @@ class Login extends React.Component {
     .catch((error) => {
       console.dir(error)
       this.setState({ showSpinner: false });
-      alert(error.response.data)
-      return
+      alert(error.response.data);
     })
   }
 
