@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Header from 'components/Header';
 import TodoList from 'components/TodoList';
 import TodoInputbox from 'components/TodoInputbox';
@@ -7,7 +7,7 @@ import ConfirmModal from 'components/ConfirmModal';
 import Spinner from 'components/Spinner';
 import api from '../../api';
 
-class Home extends Component {
+class Home extends React.Component {
 
   constructor(props) {
     super(props);

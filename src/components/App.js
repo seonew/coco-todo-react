@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -6,8 +6,7 @@ import { Home, Login } from 'pages';
 import theme from "./theme";
 import './App.css';
 
-class App extends Component {
-
+class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
@@ -24,7 +23,6 @@ class App extends Component {
       </MuiThemeProvider>
     );
   }
-
 }
 
 export default App;
