@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Comfortaa|Josefin+Sans|Righteous");
 
-body, html {
+body,
+html {
   margin: 0;
   box-sizing: border-box;
 }
 
 body {
   min-width: 100px;
-  font-family: -apple-system,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -37,7 +38,6 @@ body {
 }
 
 .dimmer {
-  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
@@ -103,7 +103,9 @@ body {
   min-height: 100vh;
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
   box-sizing: inherit;
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
