@@ -3,6 +3,9 @@ import colors from "@material-ui/core/colors/cyan";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: {
       ...colors,
